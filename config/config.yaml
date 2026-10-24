@@ -1,0 +1,29 @@
+# Deep Research settings. Environment variables (see README) override these values.
+
+research:
+  max_queries: 4             # search queries per iteration
+  max_searchs: 4             # Tavily results per query
+  max_iteration: 3           # plan -> search -> filter rounds
+  rerank_score_threshold: 0.6
+  max_completion_token: 8192
+  interactive: true          # ask clarifying questions first (CLI and Python)
+  use_async: true            # run searches and summaries concurrently
+  remove_thinking_token: true
+  min_content_words: 50      # drop sources with less text than this
+  min_content_chars: 200
+
+# Together AI model IDs as of July 2025. Together retires models over time,
+# so check https://docs.together.ai/docs/serverless-models and edit these if a call fails.
+models:
+  planning_model: "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8"
+  summarization_model: "meta-llama/Llama-3.3-70B-Instruct-Turbo"
+  json_model: "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo"
+  answer_model: "deepseek-ai/DeepSeek-R1"
+
+logging:
+  level: "INFO"
+
+# Context budget in tokens, kept under the models' context window
+token_management:
+  planning_token_limit: 80000
+  report_token_limit: 100000

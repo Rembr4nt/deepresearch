@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Research</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- Markdown rendering library -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js" integrity="sha384-QsSpx6a0USazT7nK7w8qXDgpSAPhFsb2XtpoLFQ5+X2yFN6hvCKnwEzN8M5FWaJb" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" integrity="sha384-+VfUPEb0PdtChMwmBcBmykRMDd+v6D/oFmB3rZM/puCMDYcIvF968OimRh4KQY9a" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Syntax highlighting for markdown preview -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" integrity="sha384-wFjoQjtV1y5jVHbt0p35Ui8aV8GVpEZkyF99OXWqP/eNJDU93D3Ugxkoyh6Y2I4A" crossorigin="anonymous" referrerpolicy="no-referrer" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha384-06z5D//U/xpvxZHuUz92xBvq3DqBBFi7Up53HRrbV7Jlv7Yvh/MZ7oenfUe9iCEt" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js" integrity="sha384-s888ApkYHxfPsp8n81g77Unl/0XYnYltLvWbwqKHcheRE8/dZPlT4IjW3mRGv/Hd" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- PDF generation library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Modern fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <h1>Deep Research</h1>
+                </div>
+                <div class="header-subtitle">
+                    <p>Turns a research topic into a cited report from live web search</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Research Form Section -->
+            <section class="research-form-section" id="researchFormSection">
+                <div class="form-container">
+                    <h2>Start Your Research</h2>
+                    
+                    <!-- Topic Input -->
+                    <div class="input-group">
+                        <label for="researchTopic">Research Topic</label>
+                        <textarea 
+                            id="researchTopic" 
+                            placeholder="Enter your research topic... (e.g., 'Impact of AI on healthcare systems', 'Climate change effects on agriculture')"
+                            rows="3"
+                            maxlength="1000"
+                        ></textarea>
+                        <div class="character-count">
+                            <span id="charCount">0</span>/1000 characters
+                        </div>
+                        <div class="topic-validation" id="topicValidation"></div>
+                    </div>
+
+                    <!-- Advanced Options Toggle -->
+                    <div class="advanced-options-toggle">
+                        <button type="button" id="advancedToggle" class="toggle-button">
+                            <i class="fas fa-cog"></i>
+                            Advanced Options
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </button>
+                    </div>
+
+                    <!-- Advanced Options Panel -->
+                    <div class="advanced-options" id="advancedOptions">
+                        <div class="options-grid">
+                            <!-- Max Queries -->
+                            <div class="option-group">
+                                <label for="maxQueries">Max Queries</label>
+                                <input type="range" id="maxQueries" min="1" max="20" value="5">
+                                <span class="option-value" id="maxQueriesValue">5</span>
+                                <small>Number of search queries to generate</small>
+                            </div>
+
+                            <!-- Max Search Results -->
+                            <div class="option-group">
+                                <label for="maxSearchs">Max Results per Query</label>
+                                <input type="range" id="maxSearchs" min="1" max="10" value="5">
+                                <span class="option-value" id="maxSearchsValue">5</span>
+                                <small>Search results per query</small>
+                            </div>
+
+                            <!-- Max Iterations -->
+                            <div class="option-group">
+                                <label for="maxIteration">Max Iterations</label>
+                                <input type="range" id="maxIteration" min="1" max="10" value="3">
+                                <span class="option-value" id="maxIterationValue">3</span>
+                                <small>Research depth and thoroughness</small>
+                            </div>
+
+                            <!-- Max Tokens -->
+                            <div class="option-group">
+                                <label for="maxTokens">Max Tokens</label>
+                                <input type="range" id="maxTokens" min="1024" max="16384" value="8192" step="512">
+                                <span class="option-value" id="maxTokensValue">8192</span>
+                                <small>Maximum length of generated report</small>
+                            </div>
+
+                            <!-- Rerank Threshold -->
+                            <div class="option-group">
+                                <label for="rerankThreshold">Relevance Threshold</label>
+                                <input type="range" id="rerankThreshold" min="0.1" max="1.0" value="0.6" step="0.1">
+                                <span class="option-value" id="rerankThresholdValue">0.6</span>
+                                <small>Minimum relevance score for sources</small>
+                            </div>
+
+                            <!-- Remove Thinking Tokens -->
+                            <div class="option-group checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="removeThinkingToken" checked>
+                                    <span class="checkmark"></span>
+                                    Clean Output
+                                </label>
+                                <small>Remove AI reasoning tokens from results</small>
+                            </div>
+
+                            <!-- Interactive Mode -->
+                            <div class="option-group checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="interactiveMode">
+                                    <span class="checkmark"></span>
+                                    Interactive Mode
+                                </label>
+                                <small>AI asks clarification questions before research</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button type="button" id="startResearchBtn" class="primary-button">
+                            <i class="fas fa-search"></i>
+                            Start Research
+                        </button>
+                        <button type="button" id="cancelResearchBtn" class="cancel-button" style="display: none;">
+                            <i class="fas fa-stop"></i>
+                            Cancel Research
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="progress-section" id="progressSection" style="display: none;">
+                <div class="progress-container">
+                    <h3>Research in Progress</h3>
+                    
+                    <!-- Progress Bar -->
+                    <div class="progress-bar-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-percentage" id="progressPercentage">0%</div>
+                    </div>
+
+                    <!-- Current Stage -->
+                    <div class="current-stage">
+                        <div class="stage-info">
+                            <div class="stage-icon" id="stageIcon">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                            <div class="stage-details">
+                                <div class="stage-title" id="stageTitle">Initializing Research...</div>
+                                <div class="stage-message" id="stageMessage">Preparing research environment</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Details -->
+                    <div class="progress-details" id="progressDetails">
+                        <div class="detail-item">
+                            <span class="detail-label">Current Topic:</span>
+                            <span class="detail-value" id="currentTopic">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Iteration:</span>
+                            <span class="detail-value" id="currentIteration">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Results Found:</span>
+                            <span class="detail-value" id="resultsFound">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Cancel Action -->
+                    <div class="progress-actions">
+                        <button type="button" id="cancelProgressBtn" class="cancel-button">
+                            <i class="fas fa-stop"></i>
+                            Cancel Research
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h3>Research Results</h3>
+                        <div class="results-actions">
+                            <div class="download-dropdown">
+                                <button type="button" id="downloadBtn" class="secondary-button dropdown-toggle">
+                                    <i class="fas fa-download"></i>
+                                    Download Report
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu" id="downloadMenu">
+                                    <button type="button" data-format="markdown" class="dropdown-item">
+                                        <i class="fab fa-markdown"></i>
+                                        Markdown (.md)
+                                    </button>
+                                    <button type="button" data-format="pdf" class="dropdown-item">
+                                        <i class="fas fa-file-pdf"></i>
+                                        PDF (.pdf)
+                                    </button>
+                                    <button type="button" data-format="txt" class="dropdown-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        Plain Text (.txt)
+                                    </button>
+                                    <button type="button" data-format="json" class="dropdown-item">
+                                        <i class="fas fa-file-code"></i>
+                                        JSON Data (.json)
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" id="copyToClipboardBtn" class="secondary-button">
+                                <i class="fas fa-copy"></i>
+                                Copy
+                            </button>
+                            <button type="button" id="newResearchBtn" class="primary-button">
+                                <i class="fas fa-plus"></i>
+                                New Research
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Research Summary -->
+                    <div class="research-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Topic:</span>
+                            <span class="summary-value" id="resultTopic">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Completed:</span>
+                            <span class="summary-value" id="completedTime">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Processing Time:</span>
+                            <span class="summary-value" id="processingTime">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Format Toggle Tabs -->
+                    <div class="format-tabs">
+                        <button type="button" class="format-tab active" data-format="rendered" id="renderedTab">
+                            <i class="fas fa-eye"></i>
+                            Rendered View
+                        </button>
+                        <button type="button" class="format-tab" data-format="markdown" id="markdownTab">
+                            <i class="fab fa-markdown"></i>
+                            Markdown Source
+                        </button>
+                    </div>
+
+                    <!-- Research Content -->
+                    <div class="research-content-container">
+                        <!-- Rendered HTML View -->
+                        <div class="research-content active" id="researchContentRendered">
+                            <!-- Rendered content will be displayed here -->
+                        </div>
+                        
+                        <!-- Markdown Source View -->
+                        <div class="research-content-markdown" id="researchContentMarkdown">
+                            <pre><code class="language-markdown" id="markdownSource"></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Error Section -->
+            <section class="error-section" id="errorSection" style="display: none;">
+                <div class="error-container">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Research Error</h3>
+                    <div class="error-message" id="errorMessage">
+                        An unexpected error occurred during research.
+                    </div>
+                    <button type="button" id="retryBtn" class="primary-button">
+                        <i class="fas fa-redo"></i>
+                        Try Again
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>Built on Together AI's open_deep_research.</p>
+                <div class="footer-links">
+                    <a href="#" onclick="showAbout()">About</a>
+                    <a href="#" onclick="showHelp()">Help</a>
+                    <a href="/health" target="_blank">Status</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-brain fa-spin"></i>
+            <p>Initializing AI Research...</p>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Interactive Q&A Modal -->
+    <div class="qa-modal-overlay" id="qaModalOverlay" style="display: none;">
+        <div class="qa-modal">
+            <div class="qa-modal-header">
+                <div class="qa-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="qa-header-content">
+                    <h3>Research Clarification</h3>
+                    <p>To provide the best research, I have a few questions:</p>
+                </div>
+            </div>
+            
+            <div class="qa-modal-body">
+                <!-- Question Progress -->
+                <div class="qa-progress">
+                    <div class="qa-progress-text">
+                        <span>Question <span id="qaCurrentQuestion">1</span> of <span id="qaTotalQuestions">1</span></span>
+                    </div>
+                    <div class="qa-progress-bar">
+                        <div class="qa-progress-fill" id="qaProgressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Question Content -->
+                <div class="qa-question-container">
+                    <h4 class="qa-question-text" id="qaQuestionText">Loading question...</h4>
+                    
+                    <!-- Answer Options -->
+                    <div class="qa-options" id="qaOptions">
+                        <!-- Options will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div class="qa-loading" id="qaLoading" style="display: none;">
+                    <div class="qa-loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Processing your answer...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-modal-footer">
+                <div class="qa-footer-info">
+                    <small><i class="fas fa-info-circle"></i> Select the option that best matches your research needs</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modalOverlay" style="display: none;">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Modal Title</h3>
+                <button type="button" class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content" id="modalContent">
+                <!-- Modal content -->
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="secondary-button" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
